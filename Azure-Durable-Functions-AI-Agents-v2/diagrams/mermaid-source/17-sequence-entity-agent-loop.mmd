@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant C as Client
+    participant E as Durable Entity: agent session
+    participant AF as Agent Framework runtime (in-entity)
+    participant LLM as Azure AI Foundry / Azure OpenAI
+
+    C->>E: Signal "message" operation (user input)
+    E->>E: Load persisted conversation state
+    E->>AF: Delegate to agent's native loop
+    AF->>LLM: Chat completion / tool-calling loop
+    LLM-->>AF: Response, tool calls handled internally
+    AF-->>E: Final agent response
+    E->>E: Persist updated state (checkpoint)
+    E-->>C: Return response
+    Note over E: TTL timer resets on each interaction

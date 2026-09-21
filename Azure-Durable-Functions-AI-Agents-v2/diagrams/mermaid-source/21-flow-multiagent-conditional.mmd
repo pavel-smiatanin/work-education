@@ -1,0 +1,8 @@
+flowchart TB
+    In(["Incoming email"]) --> Spam["Agent: SpamDetection"]
+    Spam --> Chk{"is_spam?"}
+    Chk -- true --> Handle["Executor: SpamHandler"]
+    Chk -- false --> Assist["Agent: EmailAssistant"]
+    Assist --> Send["Executor: EmailSender"]
+    Handle --> Out(["Workflow output"])
+    Send --> Out

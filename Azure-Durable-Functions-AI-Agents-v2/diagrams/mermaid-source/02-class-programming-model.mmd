@@ -1,0 +1,31 @@
+classDiagram
+    class Client {
+        +StartNewAsync(name, input) InstanceId
+        +RaiseEventAsync(instanceId, eventName, data)
+        +GetStatusAsync(instanceId) OrchestrationStatus
+        +TerminateAsync(instanceId, reason)
+        +SignalEntityAsync(entityId, operation, input)
+    }
+    class Orchestrator {
+        <<deterministic>>
+        +CallActivityAsync(name, input)
+        +CallSubOrchestratorAsync(name, input)
+        +CreateTimer(fireAt)
+        +WaitForExternalEvent(name)
+        +ContinueAsNew(input)
+        +GetAgent(name) DurableAIAgent
+    }
+    class Activity {
+        <<non-deterministic, side-effecting>>
+        +Run(input) Output
+    }
+    class Entity {
+        <<serialized operations>>
+        +State
+        +Operation(name, input) Output
+    }
+    Client --> Orchestrator : starts and signals
+    Client --> Entity : signals and reads state
+    Orchestrator --> Activity : schedules, checkpointed
+    Orchestrator --> Entity : locks, signals, calls
+    Orchestrator --> Orchestrator : sub-orchestration

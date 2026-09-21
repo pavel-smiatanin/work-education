@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant C as Caller
+    participant Client as Durable Client (HTTP trigger)
+    participant O as Orchestration
+    C->>Client: POST start orchestration
+    Client->>O: StartNewAsync
+    Client-->>C: 202 Accepted plus statusQueryGetUri
+    loop Poll until complete
+        C->>Client: GET statusQueryGetUri
+        Client->>O: GetStatusAsync
+        O-->>Client: Running or Completed
+        Client-->>C: 202 Running, or 200 plus result
+    end

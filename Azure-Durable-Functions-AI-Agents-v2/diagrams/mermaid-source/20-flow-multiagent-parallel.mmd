@@ -1,0 +1,9 @@
+flowchart TB
+    In(["Question"]) --> Parse["Activity: Parse question"]
+    Parse --> FO{"Fan-out"}
+    FO --> Phy["Agent: Physicist"]
+    FO --> Chem["Agent: Chemist"]
+    Phy --> FI{"Fan-in barrier"}
+    Chem --> FI
+    FI --> Agg["Executor: Aggregate responses"]
+    Agg --> Out(["Combined answer"])

@@ -1,0 +1,26 @@
+flowchart TB
+    User["<b>Business User / API Client</b><br/><i>[Person]</i><br/>Starts and interacts with an agent session"]
+    Approver["<b>Human Approver</b><br/><i>[Person]</i><br/>Reviews and approves pending agent actions"]
+
+    System["<b>Durable Agent Application</b><br/><i>[Software System]</i><br/>Azure Durable Functions app hosting single- and multi-agent orchestrations"]
+
+    AOAI["<b>Azure AI Foundry / Azure OpenAI</b><br/><i>[External System]</i><br/>LLM inference"]
+    DTS["<b>Durable Task Scheduler</b><br/><i>[External System]</i><br/>Managed state store and dashboard"]
+    Ent["<b>Enterprise Systems</b><br/><i>[External System]</i><br/>ERP, CRM, ticketing, internal APIs"]
+    KV["<b>Azure Key Vault</b><br/><i>[External System]</i><br/>Secrets"]
+    AppI["<b>Application Insights</b><br/><i>[External System]</i><br/>Telemetry, tracing, KQL"]
+
+    User -->|"Starts / resumes session (HTTPS)"| System
+    Approver -->|"Approves / rejects (HTTPS)"| System
+    System -->|"LLM calls (managed identity)"| AOAI
+    System -->|"Checkpoints state (gRPC, private endpoint)"| DTS
+    System -->|"Tool calls (managed identity)"| Ent
+    System -->|"Reads secrets (managed identity)"| KV
+    System -->|"Emits traces (HTTPS)"| AppI
+
+    classDef person fill:#08427b,stroke:#052e56,color:#fff
+    classDef system fill:#1168bd,stroke:#0b4884,color:#fff
+    classDef ext fill:#999999,stroke:#6b6b6b,color:#fff
+    class User,Approver person
+    class System system
+    class AOAI,DTS,Ent,KV,AppI ext

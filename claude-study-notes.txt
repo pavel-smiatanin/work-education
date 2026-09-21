@@ -1,0 +1,74 @@
+https://claudecertificationguide.com/learn
+
+
+AI NLP (Natural Language Processing или обработка естественного языка) — это раздел искусственного интеллекта, который помогает компьютерам понимать, анализировать и генерировать человеческую речь — как письменную, так и устную
+
+
+AI Adaptive Agent — агент, способный самостоятельно корректировать план действий и поведение в режиме реального времени при изменении внешних условий, получении новых данных или возникновении непредвиденных ошибок
+
+
+ReAct = паттерн объединяющий 3 последовательных действия: Reason/Think (результат список действий-вызовов тулов) -> Act (tool calls) -> Observe (Отсылка результатов тулов на анализ обратно)
+
+confirmation flag pattern
+
+scratchpad pattern - to manage context for preserving critical information & memory
+- идея сохранять важные факты и детали которые нужны между шагами. Это не лог и не история сообщений!!!
+
+context degradation - ухудшение способности модели удерживать, понимать и правильно использовать информацию в рамках одной продолжительной беседы или сессии. Симптомы
+- Игнорирование ранних инструкций инструкций
+- Эффект «потери в середине» (Lost in the Middle): модель хорошо помнит самое начало и самый конец диалога, но полностью игнорирует информацию из его середины.
+
+Agent не должен иметь более 5 тулов в истользовании. Если больше то это ведет к деградации и неправильному или незызову тула вовсе!
+
+Любая мульти-агентная архитектура реализует SoC принцип
+Hub-and-Spoke (Star) architecture
+
+
+Handoff verificatioand acknowledgement / Handoff protocol
+
+Agent external memory is implemented via Tools!
+
+------
+Tool description is behavioral instruction(s), not documentation. It is not for human, it is for Claude to make a decision when to call the tool!
+
+Tool description should answer next questions:
+	- What domain does this tool operate in (domain)?
+	- When should this tool be called (trigger conditions)?
+	- What should this tool not be used for (exclusion)?
+	- Does this tool have ordering constraints (Sequencing)?
+Что делает, когда вызывается, что возвращает, когда НЕ использовать, общее представление о входящих данных
+
+Tools defined in an agent are private and can't be reused. How to reuse?
+MCP exposes the same tool set many agents. So MCP is a wau to implement shared tools
+
+Tool должен реализовывать Idempotency
+
+Circuit Breaker Pattern
+
+Примеры MCP
+!!! https://github.com/SciSharp/Awesome-DotNET-MCP
+!!! https://modelcontextprotocol.io/docs
+https://github.com/microsoft/mcp-dotnet-samples
+
+неясен формат
+неясны требования и форма как все проходит
+нет
+
+
+непонятен пш
+
+Godel Factory
+Существующий воркфлоу
+
+Посмотреть 
+Сколько в день уделять время
+Комманда - 2 человека
+Что есть артифакт? Дисовери фаза. но требует приложения
+
+
+
+
+
+
+
+

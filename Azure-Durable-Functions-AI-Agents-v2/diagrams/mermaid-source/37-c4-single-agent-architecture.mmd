@@ -1,0 +1,34 @@
+flowchart TB
+    User["<b>Client / Upstream System</b><br/><i>[Person]</i><br/>Starts or resumes an agent session"]
+
+    subgraph Boundary["Durable Functions App — Flex Consumption [Software System Boundary]"]
+        direction TB
+        ClientFn["<b>Client Function</b><br/><i>[Container: HTTP / event trigger]</i><br/>Starts/resumes sessions, returns status URL"]
+        Orchestrator["<b>Orchestrator / Durable Entity</b><br/><i>[Container: Durable Task]</i><br/>Agent control flow: deterministic pipeline or agent loop"]
+        Activities["<b>Activity Functions</b><br/><i>[Container: Durable Task Activities]</i><br/>LLM calls, tool calls, enterprise API calls"]
+    end
+
+    DTS[("<b>Durable Task Scheduler</b><br/><i>[External Container: Managed PaaS]</i><br/>Orchestration and entity state, checkpoint history")]
+    AOAI["<b>Azure AI Foundry / Azure OpenAI</b><br/><i>[External System]</i><br/>LLM inference"]
+    Ent["<b>Enterprise APIs / Data Stores</b><br/><i>[External System]</i><br/>Systems of record"]
+    Blob[("<b>Azure Blob Storage</b><br/><i>[External Container: Object store]</i><br/>Large documents and tool outputs")]
+    KV["<b>Azure Key Vault</b><br/><i>[External System]</i><br/>Secrets"]
+    AppI["<b>Application Insights</b><br/><i>[External System]</i><br/>Observability"]
+
+    User -->|"HTTPS, or Blob/Event Grid/Service Bus event"| ClientFn
+    ClientFn -->|"Starts / signals"| Orchestrator
+    Orchestrator -->|"Schedules, checkpointed"| Activities
+    Orchestrator -->|"Checkpoints history (gRPC, private endpoint)"| DTS
+    Activities -->|"Inference calls (managed identity)"| AOAI
+    Activities -->|"Tool / API calls (managed identity)"| Ent
+    Activities -->|"Reads/writes large payloads"| Blob
+    Orchestrator -->|"Reads secrets"| KV
+    ClientFn -.->|Telemetry| AppI
+    Orchestrator -.->|Telemetry| AppI
+
+    classDef person fill:#08427b,stroke:#052e56,color:#fff
+    classDef container fill:#1168bd,stroke:#0b4884,color:#fff
+    classDef ext fill:#999999,stroke:#6b6b6b,color:#fff
+    class User person
+    class ClientFn,Orchestrator,Activities container
+    class DTS,AOAI,Ent,Blob,KV,AppI ext

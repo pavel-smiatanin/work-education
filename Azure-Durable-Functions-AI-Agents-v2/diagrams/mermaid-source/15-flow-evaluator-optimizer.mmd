@@ -1,0 +1,7 @@
+flowchart LR
+    In(["Task"]) --> Gen["Activity: Generate via LLM"]
+    Gen --> Eval["Activity: Evaluate / critique via LLM"]
+    Eval --> Ok{"Meets quality bar?"}
+    Ok -- No --> Refine["Activity: Refine using critique"]
+    Refine --> Eval
+    Ok -- Yes --> Out(["Accepted output"])

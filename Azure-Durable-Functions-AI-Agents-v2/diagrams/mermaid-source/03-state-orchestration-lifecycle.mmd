@@ -1,0 +1,14 @@
+stateDiagram-v2
+    [*] --> Pending : Client.StartNewAsync
+    Pending --> Running : Dispatcher picks up
+    Running --> Running : Activity, timer or event completes then replay
+    Running --> Suspended : Client.SuspendAsync
+    Suspended --> Running : Client.ResumeAsync
+    Running --> Completed : Orchestrator returns
+    Running --> Failed : Unhandled exception
+    Running --> Terminated : Client.TerminateAsync
+    Running --> ContinuedAsNew : context.ContinueAsNew (eternal orchestration)
+    ContinuedAsNew --> Running : New execution starts with fresh history
+    Completed --> [*]
+    Failed --> [*]
+    Terminated --> [*]

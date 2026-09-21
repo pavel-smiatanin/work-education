@@ -1,0 +1,12 @@
+flowchart TB
+    Q(["Research question"]) --> Plan["LLM: Plan subtopics"]
+    Plan --> Sub1["Worker: Investigate subtopic 1"]
+    Plan --> Sub2["Worker: Investigate subtopic 2"]
+    Plan --> SubN["Worker: Investigate subtopic N"]
+    Sub1 --> Merge["Fan-in: Merge findings"]
+    Sub2 --> Merge
+    SubN --> Merge
+    Merge --> More{"Gaps identified?"}
+    More -- Yes --> Plan
+    More -- No --> Final["LLM: Synthesize final report"]
+    Final --> Out(["Research report"])

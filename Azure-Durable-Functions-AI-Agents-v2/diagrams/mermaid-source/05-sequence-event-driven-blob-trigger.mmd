@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant U as Upstream System
+    participant Blob as Azure Blob Storage
+    participant EG as Event Grid
+    participant CF as Client Function (Blob-triggered)
+    participant O as Orchestration: DocumentIntake
+    participant Sink as Downstream System
+
+    U->>Blob: Upload document
+    Blob->>EG: Blob created event
+    EG->>CF: Deliver event (near real-time)
+    CF->>O: ScheduleNewOrchestrationInstanceAsync
+    Note over O: Runs extract, classify, summarize activities (Diagram 27)
+    O->>EG: Publish orchestrator lifecycle event (optional)
+    O-->>Sink: Store result / notify

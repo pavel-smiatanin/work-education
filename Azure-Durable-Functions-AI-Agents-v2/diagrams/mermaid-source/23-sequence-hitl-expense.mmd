@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant Emp as Employee
+    participant O as Orchestration: ExpenseReimbursement
+    participant Mgr as RequestPort: ManagerApproval
+    participant Fin as Executor: PrepareFinanceReview
+    participant Bud as RequestPort: BudgetApproval
+    participant Comp as RequestPort: ComplianceApproval
+    participant Reimb as Executor: Reimburse
+
+    Emp->>O: POST /run expense request
+    O->>Mgr: Pause, request manager approval
+    Note over O: Zero compute consumed while waiting
+    Mgr-->>O: POST /respond approved
+    O->>Fin: PrepareFinanceReview
+    par Parallel approvals
+        O->>Bud: Pause, request budget approval
+        Bud-->>O: Approved
+    and
+        O->>Comp: Pause, request compliance approval
+        Comp-->>O: Approved
+    end
+    O->>Reimb: Process reimbursement
+    Reimb-->>O: Done
+    O-->>Emp: GET /status Completed

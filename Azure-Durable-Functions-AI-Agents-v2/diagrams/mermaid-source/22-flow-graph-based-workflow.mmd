@@ -1,0 +1,10 @@
+flowchart LR
+    subgraph GraphWorkflow["Graph-Based Workflow"]
+    N1["Executor: Start"] --> N2["Executor / Agent A"]
+    N2 --> N3{"Switch-case"}
+    N3 -- Case 1 --> N4["Executor / Agent B"]
+    N3 -- Default --> N5["Executor / Agent C"]
+    N4 --> N6["Fan-in"]
+    N5 --> N6
+    N6 --> N7["Executor: Yield output"]
+    end

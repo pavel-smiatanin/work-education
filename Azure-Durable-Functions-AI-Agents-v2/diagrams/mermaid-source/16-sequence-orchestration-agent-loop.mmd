@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant C as Client
+    participant O as Orchestrator (eternal, continue-as-new)
+    participant LLM as Activity: LLM call
+    participant Tool as Activity: Tool call
+    participant Ext as External event (human)
+
+    C->>O: Start agent session
+    loop Agent loop iteration
+        O->>LLM: Send conversation and tool results
+        LLM-->>O: Response (text or tool calls)
+        alt Tool call requested
+            O->>Tool: Execute tool (activity)
+            Tool-->>O: Tool result
+        else Needs human input
+            O->>Ext: WaitForExternalEvent
+            Ext-->>O: Human response
+        else Task complete
+            O->>O: Exit loop
+        end
+        O->>O: ContinueAsNew if history large
+    end
+    O-->>C: Final response

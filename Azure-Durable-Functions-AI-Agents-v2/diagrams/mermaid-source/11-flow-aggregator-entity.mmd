@@ -1,0 +1,11 @@
+flowchart TB
+    subgraph Sources
+      S1["Event source 1"]
+      S2["Event source 2"]
+      S3["Event source N"]
+    end
+    S1 --> E[("Durable Entity: Aggregator")]
+    S2 --> E
+    S3 --> E
+    E --> Q["Orchestrator / Client reads current state"]
+    Q --> Out(["Aggregated view returned"])

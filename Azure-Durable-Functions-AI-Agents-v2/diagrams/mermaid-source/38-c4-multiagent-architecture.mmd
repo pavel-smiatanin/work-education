@@ -1,0 +1,37 @@
+flowchart TB
+    User["<b>Client / Upstream System</b><br/><i>[Person]</i>"]
+    Approver["<b>Human Approver</b><br/><i>[Person]</i>"]
+
+    subgraph Boundary["Durable Functions App [Software System Boundary]"]
+        direction TB
+        ClientFn["<b>Client Function</b><br/><i>[Container: HTTP trigger]</i><br/>Starts multi-agent workflow"]
+        TopOrch["<b>Top-Level Orchestration / Graph Workflow</b><br/><i>[Container: Durable Task]</i><br/>Sequential, parallel and conditional coordination"]
+        AgentA["<b>Agent: Research</b><br/><i>[Container: Durable Entity]</i>"]
+        AgentB["<b>Agent: Writer</b><br/><i>[Container: Durable Entity]</i>"]
+        AgentC["<b>Agent: Reviewer</b><br/><i>[Container: Durable Entity]</i>"]
+        Shared["<b>Shared Aggregator Entity</b><br/><i>[Container: Durable Entity]</i><br/>Cross-agent scratchpad, lock, and rate-limit gate"]
+        Activities["<b>Activity Functions</b><br/><i>[Container: Durable Task Activities]</i><br/>Tool calls, publishing"]
+    end
+
+    DTS[("<b>Durable Task Scheduler</b><br/><i>[External Container: Managed PaaS]</i><br/>State and checkpoint history for orchestration and all agent entities")]
+    AOAI["<b>Azure AI Foundry / Azure OpenAI</b><br/><i>[External System]</i>"]
+
+    User -->|HTTPS| ClientFn
+    ClientFn --> TopOrch
+    TopOrch -->|"context.GetAgent / RunAsync"| AgentA
+    TopOrch -->|"context.GetAgent / RunAsync"| AgentB
+    TopOrch -->|"context.GetAgent / RunAsync"| AgentC
+    TopOrch -->|"Signals / reads state"| Shared
+    TopOrch --> Activities
+    TopOrch -->|"RequestPort: waits for approval"| Approver
+    AgentA -->|Inference| AOAI
+    AgentB -->|Inference| AOAI
+    AgentC -->|Inference| AOAI
+    TopOrch -->|"Checkpoints (gRPC)"| DTS
+
+    classDef person fill:#08427b,stroke:#052e56,color:#fff
+    classDef container fill:#1168bd,stroke:#0b4884,color:#fff
+    classDef ext fill:#999999,stroke:#6b6b6b,color:#fff
+    class User,Approver person
+    class ClientFn,TopOrch,AgentA,AgentB,AgentC,Shared,Activities container
+    class DTS,AOAI ext

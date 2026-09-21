@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant C as Client
+    participant O as Orchestration: DocumentPublishing
+    participant R as ResearchAgent
+    participant W as WriterAgent
+    participant P as Activity: PublishDocument
+
+    C->>O: Start(topic)
+    O->>R: RunAsync Research: topic
+    R-->>O: Research findings (checkpointed)
+    O->>W: RunAsync Write using findings
+    W-->>O: Draft document (checkpointed)
+    O->>P: CallActivityAsync(title, content)
+    P-->>O: Published URL
+    O-->>C: Result

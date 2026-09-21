@@ -1,0 +1,8 @@
+flowchart LR
+    Quote(["Quote request"]) --> Sales["Agent: Sales configurator"]
+    Sales --> Pricing["Activity: Pricing engine"]
+    Pricing --> Credit{"Credit check agent"}
+    Credit -- Approved --> Legal2["Agent: Contract review"]
+    Credit -- Declined --> Reject(["Reject / escalate"])
+    Legal2 --> Order["Activity: Create order in ERP"]
+    Order --> Fulfill(["Order fulfillment triggered"])

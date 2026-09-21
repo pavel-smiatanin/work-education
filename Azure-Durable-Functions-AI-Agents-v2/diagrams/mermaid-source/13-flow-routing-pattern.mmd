@@ -1,0 +1,9 @@
+flowchart TB
+    In(["Incoming request"]) --> C["Activity: Classifier LLM call"]
+    C --> R{"Route by classification"}
+    R -- Category A --> AgA["Specialized Agent A"]
+    R -- Category B --> AgB["Specialized Agent B"]
+    R -- Unknown / low confidence --> Human["Human queue"]
+    AgA --> Out(["Response"])
+    AgB --> Out
+    Human --> Out

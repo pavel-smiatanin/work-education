@@ -1,0 +1,10 @@
+flowchart TB
+    Batch(["Product catalog: N items"]) --> FO{"Fan-out N activities"}
+    FO --> I1["Activity: Enrich item 1 via LLM"]
+    FO --> I2["Activity: Enrich item 2 via LLM"]
+    FO --> In2["Activity: Enrich item N via LLM"]
+    I1 --> FI{"Fan-in"}
+    I2 --> FI
+    In2 --> FI
+    FI --> Write["Activity: Bulk write enriched catalog"]
+    Write --> Out(["Catalog updated, scale-to-zero"])

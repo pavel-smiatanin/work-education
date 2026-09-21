@@ -1,0 +1,18 @@
+gantt
+    title Proof-of-Concept Roadmap
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %d
+    section Phase 1 - Deterministic pipeline
+    Design and local dev setup   :p1a, 2026-10-01, 5d
+    Build pipeline               :p1b, after p1a, 10d
+    Validate checkpointing       :p1c, after p1b, 5d
+    section Phase 2 - Human-in-the-loop
+    Design approval flow        :p2a, after p1c, 5d
+    Build and test               :p2b, after p2a, 8d
+    section Phase 3 - Multi-agent fan-out
+    Design multi-agent and rate-limit handling :p3a, after p2b, 5d
+    Build and test                :p3b, after p3a, 12d
+    section Phase 4 - Production hardening
+    Networking, identity, versioning strategy :p4a, after p3b, 7d
+    DR topology and load/resilience testing   :p4b, after p4a, 7d
+    Security and compliance review             :p4c, after p4b, 5d

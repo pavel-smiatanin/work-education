@@ -1,0 +1,5 @@
+flowchart LR
+    Start(["Client request"]) --> A1["Activity: Retrieve context"]
+    A1 --> A2["Activity: LLM reasoning step"]
+    A2 --> A3["Activity: Format / respond"]
+    A3 --> End(["Return result"])

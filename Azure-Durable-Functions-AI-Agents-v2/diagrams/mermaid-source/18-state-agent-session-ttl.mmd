@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> Created : First message signals entity
+    Created --> Active : Conversation in progress
+    Active --> Active : New message resets TTL timer
+    Active --> Idle : No activity
+    Idle --> Active : New message before TTL expiry
+    Idle --> Expired : TTL elapsed, default 14 days
+    Expired --> [*] : State deleted
+    Active --> [*] : Explicit session deletion

@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant O as Orchestrator (fan-out)
+    participant Gate as Durable Entity: TokenBudgetGate
+    participant A as Activity: Call LLM
+    participant AOAI as Azure OpenAI deployment
+
+    O->>Gate: Signal: request budget slot
+    Gate-->>O: Slot granted (within TPM/RPM budget)
+    O->>A: Schedule LLM call
+    A->>AOAI: Chat completion request
+    alt Within limits
+        AOAI-->>A: 200 response plus rate-limit headers
+        A-->>O: Result
+    else 429 Too Many Requests
+        AOAI-->>A: 429 plus retry-after-ms
+        A->>A: Backoff for retry-after-ms (single retry layer)
+        A->>AOAI: Retry request
+        AOAI-->>A: 200 response
+        A-->>O: Result
+    end
+    O->>Gate: Signal: release budget slot

@@ -1,0 +1,6 @@
+flowchart LR
+    Doc(["Incoming document"]) --> Ex["Activity: Extract text / fields"]
+    Ex --> Cl["Activity: Classify document type"]
+    Cl --> Sum["Activity: Summarize via LLM"]
+    Sum --> St["Activity: Store result and index"]
+    St --> Done(["Stored, exactly-once processed"])

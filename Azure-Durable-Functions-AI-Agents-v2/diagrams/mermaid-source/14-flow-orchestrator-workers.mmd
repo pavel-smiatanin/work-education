@@ -1,0 +1,12 @@
+flowchart TB
+    In(["Task"]) --> Plan["Activity: LLM plans subtasks"]
+    Plan --> Dyn{"Dynamic subtask list"}
+    Dyn --> W1["Worker activity 1"]
+    Dyn --> W2["Worker activity 2"]
+    Dyn --> Wn["Worker activity N"]
+    W1 --> Collect["Fan-in: collect results"]
+    W2 --> Collect
+    Wn --> Collect
+    Collect --> Review{"More subtasks needed?"}
+    Review -- Yes --> Plan
+    Review -- No --> Out(["Final synthesis"])

@@ -1,0 +1,10 @@
+flowchart LR
+    Task(["Coding task"]) --> Gen["Activity: LLM generates code / PR"]
+    Gen --> AutoReview["Activity: Automated review and tests"]
+    AutoReview --> Pass{"Tests pass?"}
+    Pass -- No --> Gen
+    Pass -- Yes --> Human["External event: Human code review"]
+    Human --> Approved{"Approved?"}
+    Approved -- No, changes requested --> Gen
+    Approved -- Yes --> Merge["Activity: Merge / deploy"]
+    Merge --> Out(["Change shipped"])

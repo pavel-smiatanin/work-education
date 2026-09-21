@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Req as Requester
+    participant O as Orchestration
+    participant Mgr as Manager (external event)
+    participant Fin as Finance (external event)
+    Req->>O: Submit request
+    O->>Mgr: Wait for approval (durable timer + event)
+    Mgr-->>O: Approved
+    O->>Fin: Wait for finance sign-off
+    Fin-->>O: Approved
+    O-->>Req: Notify approved and processed

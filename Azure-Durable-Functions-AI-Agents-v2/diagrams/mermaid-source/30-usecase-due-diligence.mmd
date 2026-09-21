@@ -1,0 +1,10 @@
+flowchart TB
+    In(["Due-diligence request"]) --> FO{"Fan-out"}
+    FO --> Legal["Agent: Legal review"]
+    FO --> Fin2["Agent: Financial review"]
+    FO --> Tech["Agent: Technical review"]
+    Legal --> FI{"Fan-in"}
+    Fin2 --> FI
+    Tech --> FI
+    FI --> Report["Activity: Compile combined report"]
+    Report --> Out(["Due-diligence report"])

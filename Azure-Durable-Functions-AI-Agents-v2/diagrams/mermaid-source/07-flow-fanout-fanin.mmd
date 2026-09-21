@@ -1,0 +1,10 @@
+flowchart TB
+    Start(["Orchestrator: input"]) --> F{"Fan-out"}
+    F --> T1["Activity / Agent: Task 1"]
+    F --> T2["Activity / Agent: Task 2"]
+    F --> T3["Activity / Agent: Task N"]
+    T1 --> J{"Fan-in: Task.WhenAll"}
+    T2 --> J
+    T3 --> J
+    J --> Agg["Activity: Aggregate results"]
+    Agg --> End(["Return combined result"])

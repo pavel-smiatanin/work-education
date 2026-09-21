@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant C as Client
+    participant O as Orchestrator (replay engine)
+    participant H as History Store (Durable Task Scheduler)
+    participant A1 as Activity: Call LLM
+    participant A2 as Activity: Call Tool
+
+    C->>O: Start orchestration
+    O->>H: Append OrchestratorStarted
+    O->>A1: Schedule LLM call
+    A1-->>O: Result (tokens spent)
+    O->>H: Append TaskCompleted A1
+    Note over O,H: Process crashes or VM recycles here
+    O->>A2: Schedule tool call
+    Note right of O: Worker restarts
+    O->>H: Replay from history
+    H-->>O: Replays A1 result, no re-execution, no re-billed tokens
+    O->>A2: Re-schedule (was never confirmed complete)
+    A2-->>O: Result
+    O->>H: Append TaskCompleted A2
+    O->>C: Orchestration completed

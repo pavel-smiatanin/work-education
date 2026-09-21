@@ -1,0 +1,15 @@
+flowchart TD
+    Q1{"Multi-step workflow, or any wait beyond an HTTP timeout?"} -- No --> Simple["Stateless Azure Function (Section 6.1)"]
+    Q1 -- Yes --> Q1b{"Need automatic checkpointing and failure recovery?"}
+    Q1b -- No --> Simple2["Stateless Function plus hand-rolled state store"]
+    Q1b -- Yes --> Q2{"Already standardized on Azure Functions runtime?"}
+    Q2 -- Yes --> Q3{"Need custom containers, GPU, or Dapr?"}
+    Q3 -- Yes --> AFCA["Azure Functions on Container Apps"]
+    Q3 -- No --> DF["Durable Functions + Durable Task Scheduler"]
+    Q2 -- No --> Q4{"Need Kubernetes/AKS or multi-cloud portability?"}
+    Q4 -- Yes --> SDK["Standalone Durable Task SDK on AKS, Container Apps, or VM"]
+    Q4 -- No --> Q5{"Low-code integration team, declarative designer preferred?"}
+    Q5 -- Yes --> Logic["Logic Apps Agent Loop"]
+    Q5 -- No --> Q6{"Building purely with Microsoft Agent Framework graphs?"}
+    Q6 -- Yes --> AFW["Agent Framework Workflows with own checkpoint manager"]
+    Q6 -- No --> DF

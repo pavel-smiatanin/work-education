@@ -1,0 +1,9 @@
+flowchart TB
+    T(["Support ticket"]) --> Cls["Activity: LLM intent and sentiment classification"]
+    Cls --> Dec{"Route"}
+    Dec -- Billing --> AgentBilling["Specialist Agent: Billing"]
+    Dec -- Technical --> AgentTech["Specialist Agent: Technical"]
+    Dec -- Escalation needed --> HumanQ["Human agent queue"]
+    AgentBilling --> Resp(["Response to customer"])
+    AgentTech --> Resp
+    HumanQ --> Resp

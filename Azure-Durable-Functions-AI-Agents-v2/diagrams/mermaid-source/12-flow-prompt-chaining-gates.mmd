@@ -1,0 +1,9 @@
+flowchart LR
+    In(["Input"]) --> D1["Activity: Draft via LLM"]
+    D1 --> V1{"Validation gate 1 passes?"}
+    V1 -- No --> D1
+    V1 -- Yes --> D2["Activity: Fact-check via LLM"]
+    D2 --> V2{"Validation gate 2 passes?"}
+    V2 -- No --> D2
+    V2 -- Yes --> D3["Activity: Finalize"]
+    D3 --> Out(["Output"])

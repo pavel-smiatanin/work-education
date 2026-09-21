@@ -1,0 +1,9 @@
+flowchart TB
+    Start(["Orchestrator starts"]) --> Chk["Activity: Check condition / poll external system"]
+    Chk --> D1{"Condition met?"}
+    D1 -- No --> T["Durable timer: wait interval"]
+    T --> Chk
+    D1 -- Yes --> Act["Activity: Take action / notify"]
+    Act --> Done{"Expiration or stop signal?"}
+    Done -- No --> T
+    Done -- Yes --> End(["Orchestration ends"])

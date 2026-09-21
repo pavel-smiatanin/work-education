@@ -1,0 +1,24 @@
+flowchart TB
+    subgraph Before["Before deployment"]
+        OldWorkers["Workers: orchestrator v1"]
+        OldInstances["Running instances: version 1"]
+        OldWorkers -->|executes| OldInstances
+    end
+
+    Deploy["Deploy orchestrator v2 with version-aware branching"] --> During
+
+    subgraph During["During rolling deployment"]
+        NewWorkers["Workers: orchestrator v1 and v2 coexist"]
+        V1Instances["Existing instances: version 1"]
+        V2Instances["New instances: version 2 (defaultVersion)"]
+        NewWorkers -->|"can execute (backward compatible)"| V1Instances
+        NewWorkers -->|"executes"| V2Instances
+    end
+
+    During --> After
+
+    subgraph After["Old instances drained"]
+        AllWorkers["Workers: orchestrator v2"]
+        AllInstances["All running instances: version 2"]
+        AllWorkers --> AllInstances
+    end

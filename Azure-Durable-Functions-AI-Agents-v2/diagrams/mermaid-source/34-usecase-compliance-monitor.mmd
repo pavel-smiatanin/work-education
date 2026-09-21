@@ -1,0 +1,7 @@
+flowchart TB
+    Start(["Eternal orchestration starts"]) --> Check["Activity: Run data-quality / compliance check"]
+    Check --> Issue{"Issue found?"}
+    Issue -- Yes --> Alert["Activity: Raise alert / ticket"]
+    Alert --> Wait["Durable timer: wait next interval"]
+    Issue -- No --> Wait
+    Wait --> Check

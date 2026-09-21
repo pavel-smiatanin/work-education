@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant O as Orchestrator
+    participant N as Activity: Send notification
+    participant H as Human
+    participant E as External Event
+
+    O->>N: Send challenge / request
+    N-->>H: Notification delivered
+    par Wait for response
+        O->>O: WaitForExternalEvent("Response")
+    and Wait for timeout
+        O->>O: CreateTimer(deadline)
+    end
+    H->>E: Submits response
+    E-->>O: Raises external event
+    O->>O: Task.WhenAny(event, timer) resolves
+    alt Event arrived first
+        O->>O: Continue with response
+    else Timeout first
+        O->>O: Handle timeout / escalate
+    end
