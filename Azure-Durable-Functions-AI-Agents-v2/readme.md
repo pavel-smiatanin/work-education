@@ -75,7 +75,6 @@ Key findings:
 
 The document recommends a phased adoption path starting with a single deterministic-workflow PoC (e.g., a document-processing or research-and-summarize agent), followed by a human-in-the-loop approval workflow, and then a multi-agent fan-out scenario, before committing to production-scale investment in the Durable Task Scheduler and associated governance, versioning, and disaster-recovery controls.
 
-This v2.0 revision extends the original research (v1.1) with four areas identified as gaps against the project's acceptance criteria and TODO list: an explicit comparison against plain, stateless Azure Functions (the most basic alternative named in the original requirements); a dedicated treatment of event-driven execution and triggers as a platform capability and as an orchestration pattern; the operational realities of deploying changed orchestrator code safely (versioning) and of running LLM calls inside a workflow engine's automatic retry model without triggering rate-limit storms; and disaster-recovery/multi-region guidance, a testing and local-development section, a consolidated risk register, and a glossary. All additions are grounded in current Microsoft Learn documentation, cited in Section 13.
 
 ## 2. Introduction and Objectives
 
@@ -93,19 +92,6 @@ The document is deliberately platform- and pattern-focused rather than a step-by
 - The document does not cover model selection, prompt engineering, evaluation/observability of model output quality, or responsible-AI governance in depth — these are treated as orthogonal concerns owned by the agent-framework and MLOps layers, not the execution framework evaluated here.
 - Non-goal: this is not a decision to adopt Durable Functions; it is the evidence base for that decision, to be validated against the PoC roadmap in Section 9 before any production commitment.
 
-### 2.2 Methodology and Changes Since v1
-
-Findings are drawn from current Microsoft Learn documentation for Azure Functions, Durable Functions, the Durable Task SDKs, the Durable Task Scheduler, Azure Container Apps, Azure OpenAI/Azure AI Foundry, and the Microsoft Agent Framework, supplemented by Microsoft engineering blog posts and independent technical commentary current as of September 2026. Durable Functions and its surrounding ecosystem changed materially during 2025–2026 — most notably the general availability of the Flex Consumption plan, the introduction of the Durable Task Scheduler as the recommended backend, and the release of the Durable Task extension for Microsoft Agent Framework — so this document reflects the current (post-refresh) state of the platform rather than the original 2018-era Durable Functions design.
-
-This v2.0 revision was produced by cross-referencing the original project requirements (research description, acceptance criteria, and TODO list) against the v1.1 document section by section. Two acceptance-criteria items and one explicitly named TODO comparison were found to be under-addressed in v1.1 and are closed in this revision:
-
-| Gap identified against requirements | v1.1 coverage | v2.0 treatment |
-|---|---|---|
-| "Event-driven execution" as a platform capability, and "event-driven workflows" as a named architectural pattern | Implicit only (external events for human-in-the-loop; the Monitor pattern) | New Section 3.6 (platform triggers) and a new pattern entry in Section 4.1, with a dedicated diagram |
-| Comparison against "Azure Functions without Durable orchestration," explicitly named in the TODO list | Not present | New Section 6.1, positioned as the first and most basic comparison |
-| Operational challenges beyond determinism (versioning, rate limits, disaster recovery) | Determinism covered (5.1); versioning, LLM quota interaction, and DR not covered | New Sections 5.5, 5.6, 5.7, plus testing/local-dev guidance folded into 8.3 |
-
-In addition, this revision adds a consolidated risk register (Section 6.5), a glossary (Appendix A), and expands the Sources list with the Microsoft Learn articles that ground the new material. All content retained from v1.1 was re-verified against current Microsoft Learn sources during this revision; no factual corrections to the retained text were required.
 
 ## 3. Azure Durable Functions: Platform Capabilities Overview
 
